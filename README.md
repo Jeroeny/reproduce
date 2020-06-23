@@ -113,3 +113,9 @@ Information for Service "psr18.http_client"
  !        compiled.                                                                                                     
 
 ```
+
+Run without framework works:
+
+```bash
+php ./run.php
+```
