@@ -96,12 +96,8 @@ diff vendor/symfony/finder/Gitignore.php Gitignore.php
 <     private static function getRegexFromGitignore(string $gitignorePattern): string
 ---
 >     private static function getRegexFromGitignore(string $gitignorePattern, bool $negative = false): string
-69c69
-<             $gitignorePattern = substr($gitignorePattern, 0, -1);
----
-> //            $gitignorePattern = substr($gitignorePattern, 0, -1);
 100c100
 <         $regex .= '($|\/)';
 ---
->         $regex .= $negative ? '($)' : '($|\/)';
+>         $regex .= $negative ? '($|\/$)' : '($|\/)';
 ```

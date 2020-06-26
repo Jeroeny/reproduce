@@ -10,7 +10,9 @@ $files = [
     'example/packages/example.yaml',
     'example/foo/bar.txt',
     'test/bar',
-    'test/bar/',
+    'test/bar.txt',
+    'test/foo/',
+    'test/foo/bla.txt',
 ];
 
 $regex = \Symfony\Component\Finder\Gitignore::toRegex(file_get_contents(__DIR__ . '/.gitignore'));

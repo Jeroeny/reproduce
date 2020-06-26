@@ -8,4 +8,5 @@
 !/example/packages/example.yaml
 !/example/test/
 
-test/bar
+test/bar.txt
+test/foo/

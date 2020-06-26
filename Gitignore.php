@@ -39,7 +39,7 @@ class Gitignore
         $ignoreLinesNegative = array_map(function (string $line) {
             return preg_replace('/^!(.*)/', '${1}', $line);
         }, $ignoreLinesNegative);
-        $ignoreLinesNegative = array_map(function (string $pattern) {
+        $ignoreLinesNegative = array_map(static function (string $pattern) {
             return self::getRegexFromGitignore($pattern, true);
         }, $ignoreLinesNegative);
 
@@ -66,7 +66,7 @@ class Gitignore
         }
 
         if ('/' === $gitignorePattern[\strlen($gitignorePattern) - 1]) {
-//            $gitignorePattern = substr($gitignorePattern, 0, -1);
+            $gitignorePattern = substr($gitignorePattern, 0, -1);
         }
 
         $iMax = \strlen($gitignorePattern);
@@ -97,7 +97,7 @@ class Gitignore
             }
         }
 
-        $regex .= $negative ? '($)' : '($|\/)';
+        $regex .= $negative ? '($|\/$)' : '($|\/)';
         $regex .= ')';
 
         return $regex;
