@@ -4,5 +4,8 @@
 
 /example/**
 !/example/example.txt
-!/example/packages/
+!/example/packages
 !/example/packages/example.yaml
+!/example/test/
+
+test/bar
