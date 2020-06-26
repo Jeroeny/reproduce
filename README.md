@@ -79,3 +79,29 @@ $ git ls-files example/
 example/example.txt
 example/packages/example.yaml
 ```
+
+The diff of `vendor/symfony/finder/Gitignore.php` and `Gitignore`:
+```diff
+diff vendor/symfony/finder/Gitignore.php Gitignore.php
+12,13d11
+< namespace Symfony\Component\Finder;
+<
+44c42,44
+<         $ignoreLinesNegative = array_map([__CLASS__, 'getRegexFromGitignore'], $ignoreLinesNegative);
+---
+>         $ignoreLinesNegative = array_map(function (string $pattern) {
+>             return self::getRegexFromGitignore($pattern, true);
+>         }, $ignoreLinesNegative);
+58c58
+<     private static function getRegexFromGitignore(string $gitignorePattern): string
+---
+>     private static function getRegexFromGitignore(string $gitignorePattern, bool $negative = false): string
+69c69
+<             $gitignorePattern = substr($gitignorePattern, 0, -1);
+---
+> //            $gitignorePattern = substr($gitignorePattern, 0, -1);
+100c100
+<         $regex .= '($|\/)';
+---
+>         $regex .= $negative ? '($)' : '($|\/)';
+```
