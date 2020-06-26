@@ -28,13 +28,29 @@ composer install
 Run the script:
 ```bash
 $ php ./run.php
+
+/(?=^(?:(?!((^example\/example\.txt($|\/))|(^example\/packages($|\/))|(^example\/packages\/example\.yaml($|\/))|(^example\/test($|\/)))).)*$)((^\.idea($|\/))|(^build($|\/))|(^vendor($|\/))|(^example\/.+($|\/))|((^|\/)test\/bar($|\/)))/
 example/example.txt ignored: false
+example/test ignored: false
 example/packages/file.yaml ignored: false
 example/packages/example.yaml ignored: false
 example/foo/bar.txt ignored: true
+test/bar ignored: true
+test/bar/ ignored: true
+
+/(?=^(?:(?!((^example\/example\.txt($))|(^example\/packages($))|(^example\/packages\/example\.yaml($))|(^example\/test\/($)))).)*$)((^\.idea\/($|\/))|(^build\/($|\/))|(^vendor\/($|\/))|(^example\/.+($|\/))|((^|\/)test\/bar\/($|\/)))/
+example/example.txt ignored: false
+example/test ignored: true
+example/packages/file.yaml ignored: true
+example/packages/example.yaml ignored: false
+example/foo/bar.txt ignored: true
+test/bar ignored: false
+test/bar/ ignored: true
 ```
 
-Which gives that output. 
+Which should give that output.
+The first regex is the one of the current (4.3 - master) Symfony finder. Including paths and there outcome.
+The second regex is the one of the `Gitignore.php` in this project. Which contains a possible fix.
 
 The expected output is:
  ```bash
