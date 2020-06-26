@@ -1,18 +1,16 @@
 <?php
 
-use Symfony\Component\HttpClient\HttpClient;
-
 require __DIR__ . '/vendor/autoload.php';
 
-$client = new \Symfony\Component\HttpClient\Psr18Client(
-    HttpClient::create(),
-    new Http\Factory\Guzzle\ResponseFactory(),
-    new Http\Factory\Guzzle\StreamFactory(),
-);
+$regex = \Symfony\Component\Finder\Gitignore::toRegex(file_get_contents(__DIR__ . '/.gitignore'));
 
-$response = $client->sendRequest(new \GuzzleHttp\Psr7\Request(
-    'GET',
-    'https://raw.githubusercontent.com/symfony/symfony/master/.gitignore',
-));
-
-echo $response->getBody();
+$files = [
+    'example/example.txt',
+    'example/packages/file.yaml',
+    'example/packages/example.yaml',
+    'example/foo/bar.txt',
+];
+foreach ($files as $file) {
+    $match = preg_match($regex, $file) === 1;
+    echo $file . ' ignored: ' . var_export($match, true) . PHP_EOL;
+}

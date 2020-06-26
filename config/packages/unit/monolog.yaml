@@ -1,6 +1,0 @@
-monolog:
-    handlers:
-        console:
-            type:   console
-            process_psr_3_messages: true
-            channels: ["!event"]

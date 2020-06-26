@@ -2,14 +2,7 @@
 /build/
 /vendor/
 
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/public/bundles/
-/var/
-###< symfony/framework-bundle ###
-
-###> symfony/web-server-bundle ###
-/.web-server-pid
-###< symfony/web-server-bundle ###
+/example/**
+!/example/example.txt
+!/example/packages/
+!/example/packages/example.yaml
