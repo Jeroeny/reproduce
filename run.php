@@ -2,6 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/Gitignore.php';
+require __DIR__ . '/GitignoreNew.php';
 
 $files = [
     'example/example.txt',
@@ -13,6 +14,8 @@ $files = [
     'test/bar.txt',
     'test/foo/',
     'test/foo/bla.txt',
+    'x.txt',
+    'var/x.txt',
 ];
 
 $regex = \Symfony\Component\Finder\Gitignore::toRegex(file_get_contents(__DIR__ . '/.gitignore'));
@@ -20,6 +23,10 @@ $regex = \Symfony\Component\Finder\Gitignore::toRegex(file_get_contents(__DIR__ 
 test($regex, $files);
 
 $fixedRegex = \Gitignore::toRegex(file_get_contents(__DIR__ . '/.gitignore'));
+
+test($fixedRegex, $files);
+
+$fixedRegex = \GitignoreNew::toRegex(file_get_contents(__DIR__ . '/.gitignore'));
 
 test($fixedRegex, $files);
 

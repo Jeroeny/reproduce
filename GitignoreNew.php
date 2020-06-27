@@ -24,9 +24,7 @@ class GitignoreNew
     public static function toRegex(string $gitignoreFileContent): string
     {
         $gitignoreFileContent = preg_replace('/^[^\\\r\n]*#.*/m', '', $gitignoreFileContent);
-        $gitignoreLines = preg_split('/\r\n|\r|\n/', $gitignoreFileContent);
-//        $gitignoreLines = array_map('trim', $gitignoreLines);
-//        $gitignoreLines = array_filter($gitignoreLines);
+        $gitignoreLines       = preg_split('/\r\n|\r|\n/', $gitignoreFileContent);
 
         $positives = [];
         $negatives = [];
@@ -38,7 +36,7 @@ class GitignoreNew
 
             if (preg_match('/^!/', $line) === 1) {
                 $positives[$i] = null;
-                $negatives[$i] = self::getRegexFromGitignore(preg_replace('/^!(.*)/', '${1}', $line));
+                $negatives[$i] = self::getRegexFromGitignore(preg_replace('/^!(.*)/', '${1}', $line), true);
 
                 continue;
             }
@@ -53,9 +51,11 @@ class GitignoreNew
             }
 
             $negativesAfter = array_filter(array_slice($negatives, $i));
-            $negativesAfter = $negativesAfter === [] ? '' : sprintf('(?<!%s)', implode('|', $negativesAfter));
+            if ($negativesAfter !== []) {
+                $pattern .=  sprintf('(?<!%s)', implode('|', $negativesAfter));
+            }
 
-            $patterns[] = sprintf('(?=%s).+%s$', $pattern, $negativesAfter);
+            $patterns[] = $pattern;
 
         }
 
@@ -65,13 +65,14 @@ class GitignoreNew
 
     private static function getRegexFromGitignore(string $gitignorePattern, bool $negative = false): string
     {
-        $regex = '(';
-        if (0 === strpos($gitignorePattern, '/')) {
-            $gitignorePattern = substr($gitignorePattern, 1);
+        $regex = '';
+        // If there is a separator at the beginning or middle (or both) of the pattern, then the pattern is relative to the directory level of the particular .gitignore file itself
+        $slashPosition = strpos($gitignorePattern, '/');
+        if ($slashPosition !== false && $slashPosition !== (strlen($gitignorePattern) - 1)) {
+            if ($slashPosition === 0) {
+                $gitignorePattern = substr($gitignorePattern, 1);
+            }
             $regex .= '^';
-        } else {
-//            $regex .= '(^|\/)';
-//            $regex .= '^';
         }
 
         if ('/' === $gitignorePattern[\strlen($gitignorePattern) - 1]) {
@@ -80,9 +81,16 @@ class GitignoreNew
 
         $iMax = \strlen($gitignorePattern);
         for ($i = 0; $i < $iMax; ++$i) {
+            $tripleChars = substr($gitignorePattern, $i, 3);
+            if ('**/' === $tripleChars) {
+                $regex .= '.*';
+                $i += 2;
+                continue;
+            }
+
             $doubleChars = substr($gitignorePattern, $i, 2);
             if ('**' === $doubleChars) {
-                $regex .= '.+';
+                $regex .= '.*';
                 ++$i;
                 continue;
             }
@@ -106,6 +114,11 @@ class GitignoreNew
             }
         }
 
-        return $regex . ')';
+        if ($negative) {
+            // a lookbehind assertion has to be a fixed width (it can not have nested '|' statements)
+            return sprintf('%s$|%s\/$', $regex, $regex);
+        }
+
+        return '(?>' . $regex . '($|\/))';
     }
 }

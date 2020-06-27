@@ -8,5 +8,14 @@
 !/example/packages/example.yaml
 !/example/test/
 
-test/bar.txt
+#test
+**/test/bar.txt
+test/test.txt
 test/foo/
+
+!var/x.txt
+var/x.t*
+!/x.txt
+/x.txt
+
+/test/bla/**/x.txt
