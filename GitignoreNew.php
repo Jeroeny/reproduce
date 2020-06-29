@@ -44,13 +44,14 @@ class GitignoreNew
             $positives[$i] = self::getRegexFromGitignore($line);
         }
 
+        $index = 0;
         $patterns = [];
-        foreach ($positives as $i => $pattern) {
+        foreach ($positives as $pattern) {
             if ($pattern === null) {
                 continue;
             }
 
-            $negativesAfter = array_filter(array_slice($negatives, $i));
+            $negativesAfter = array_filter(array_slice($negatives, ++$index));
             if ($negativesAfter !== []) {
                 $pattern .=  sprintf('(?<!%s)', implode('|', $negativesAfter));
             }
