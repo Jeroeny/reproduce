@@ -1,6 +1,6 @@
 # reproduce
 
-GitHub issue: 
+GitHub issue: https://github.com/symfony/symfony/issues/39265
 
 Bug: A yaml config file containing escaped quotes throws an error in `5.1.9` (but not in `5.1.8`) and in `5.2.0`.
 
