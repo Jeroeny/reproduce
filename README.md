@@ -13,10 +13,8 @@ So the `5.1.8` project will **not** throw an exception when running `bin/console
             $foo: 'bla\'
 ```
 
-
 ```bash
-
-.\bin\console -vvv
+.\5.2.0\bin\console -vvv
 
 In FileLoader.php line 173:
                                                                                                                                                                                                                                                                                                                        
@@ -106,5 +104,14 @@ Exception trace:
  Symfony\Bundle\FrameworkBundle\Console\Application->doRun() at \reproduce\51\vendor\symfony\console\Application.php:142
  Symfony\Component\Console\Application->run() at \reproduce\51\bin\console:43
 
+```
 
+No exception with `5.1.8`:
+
+```bash
+ .\5.1.8\bin\console -vvv
+
+Symfony 5.1.8 (env: dev, debug: true)
+
+...
 ```
