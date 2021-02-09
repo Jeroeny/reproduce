@@ -1,0 +1,15 @@
+controllers_good:
+    resource: ../../src/Controller/Good/*
+    type: annotation
+    exclude: '../../src/Controller/Good/{ExcludeController}.php'
+    prefix: '/good'
+
+controllers_bad:
+    resource: ../../src/Controller/Bad/
+    type: annotation
+    exclude: '../../src/Controller/Bad/{ExcludeController}.php'
+    prefix: '/bad'
+
+kernel:
+    resource: ../../src/Kernel.php
+    type: annotation
