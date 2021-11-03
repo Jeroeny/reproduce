@@ -30,4 +30,4 @@ In our own application, we were able to mitigate the problem by calling PHP's `g
 Another difference that is that in our app the cache returned instances of PHP classes, here I made it return `composer.lock` contents, just to have some data going through. 
 
 This project has been created using `symfony new app` (https://symfony.com/doc/current/setup.html).
-No files were altered generating except `composer.json` (`"require": {"php": ">=8.0", `) and the `src/Run.php` was added.
+No files were altered after generating, except `composer.json` (`"php": ">=8.0"..` was updated in `require`) and the `src/Run.php` was added.
