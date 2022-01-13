@@ -8,56 +8,22 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[AsCommand(name: 'run')]
 final class Run extends Command
 {
-    public function __construct(private CacheInterface $cache)
+    public function __construct(private SerializerInterface $serializer)
     {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $timeout    = time() + 30;
-        $lastOutput = 0;
-        while (time() < $timeout) {
-            $this->cache->get((string)random_int(0, PHP_INT_MAX), function () {
-                $values = [];
-                $rand   = (string)random_int(0, PHP_INT_MAX);
-                foreach ($this->getItems() as $k => $i) {
-                    $values[] = $this->cache->get(
-                        'composer.lock.' . $rand . '.' . $k,
-                        fn () => file_get_contents(__DIR__ . '/../composer.lock')
-                    );
-                }
-
-                return $values;
-            });
-
-            if ($lastOutput < time() - 1) {
-                $lastOutput = time();
-                $this->writeMem($output);
-                $cycles = gc_collect_cycles();
-                if ($cycles > 0) {
-                    $output->writeln('Cleaned cycles: ' . $cycles);
-                }
-            }
-        }
+        $output->writeln('BadOne: ' . $this->serializer->serialize(new BadOne(Uuid::v4()),'json'));
+        $output->writeln('GoodOne: ' . $this->serializer->serialize(new GoodOne(Uuid::v4()),'json'));
 
         return 0;
-    }
-
-    private function getItems(): \Generator
-    {
-        foreach (range(0, 30) as $i) {
-            yield $this->cache->get('composer.lock.' . $i, fn () => file_get_contents(__DIR__ . '/../composer.lock'));
-        }
-    }
-
-    private function writeMem(OutputInterface $output)
-    {
-        $output->writeln('Memory: ' . (memory_get_usage(false) / 1024 / 1024) . ' MB');
     }
 }
