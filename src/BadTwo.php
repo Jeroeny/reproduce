@@ -7,15 +7,15 @@ namespace App;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Uid\Uuid;
 
-abstract class Good
+class BadTwo
 {
-//    #[Ignore]
     private bool $create = false;
 
-//    #[Ignore]
     private bool $delete = false;
 
     private Uuid $id;
+
+    private string $foo = 'foo';
 
     public function __construct(Uuid $id)
     {
@@ -27,12 +27,12 @@ abstract class Good
         return $this->id;
     }
 
-    public function shouldCreateAggregate(): bool
+    public function getCreate(): bool
     {
         return $this->create;
     }
 
-    private function isDelete(): bool
+    private function getDelete(): bool
     {
         return $this->delete;
     }

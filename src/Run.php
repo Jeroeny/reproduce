@@ -22,6 +22,7 @@ final class Run extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('BadOne: ' . $this->serializer->serialize(new BadOne(Uuid::v4()),'json'));
+        $output->writeln('BadTwo: ' . $this->serializer->serialize(new BadTwo(Uuid::v4()),'json'));
         $output->writeln('GoodOne: ' . $this->serializer->serialize(new GoodOne(Uuid::v4()),'json'));
 
         return 0;
